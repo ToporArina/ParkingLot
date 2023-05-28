@@ -16,14 +16,16 @@ fun main() {
             "leave" -> leave()
             "create" -> create()
             "status" -> status()
+            "reg_by_color" -> regByColor()
+            "spot_by_color" -> spotByColor()
+            "spot_by_reg" -> spotByReg()
             "exit" -> exitProcess(0)
         }
     }
 }
 
 fun park() {
-    if (!created) {
-        println("Sorry, a parking lot has not been created.")
+    if (!isCreated()) {
         return
     }
     for (i in 0 until parking.size) {
@@ -40,8 +42,7 @@ fun park() {
 }
 
 fun leave() {
-    if (!created) {
-        println("Sorry, a parking lot has not been created.")
+    if (!isCreated()) {
         return
     }
     parking[inp[1].toInt() - 1] = ""
@@ -58,8 +59,7 @@ fun create() {
 }
 
 fun status() {
-    if (!created) {
-        println("Sorry, a parking lot has not been created.")
+    if (!isCreated()) {
         return
     }
     var isNotEmpty = false
@@ -73,3 +73,80 @@ fun status() {
         println("Parking lot is empty.")
     }
 }
+
+fun regByColor() {
+    if (!isCreated()) {
+        return
+    }
+    var str = ""
+    for (i in 0 until parking.size) {
+        try {
+            if (parking[i].split(" ")[1].lowercase() == inp[1].lowercase()) {
+                str += parking[i].split(" ")[0] + ", "
+            }
+        } catch (e: Exception) {
+            continue
+        }
+    }
+    if (str.length == 0) {
+        println("No cars with color ${inp[1]} were found.")
+    } else {
+        str = str.substring(0, str.length - 2)
+        println(str)
+    }
+}
+
+fun spotByColor() {
+    if (!isCreated()) {
+        return
+    }
+    var str = ""
+//    println(parking[1].split(" ")[1].lowercase())
+//    println(inp[1].lowercase())
+    for (i in 0 until parking.size) {
+        try {
+            if (parking[i].split(" ")[1].lowercase() == inp[1].lowercase()) {
+                str += "${ i + 1 }, "
+            }
+        } catch (e: Exception) {
+            continue
+        }
+    }
+    if (str.length == 0) {
+        println("No cars with color ${inp[1]} were found.")
+    } else {
+        str = str.substring(0, str.length - 2)
+        println(str)
+    }
+}
+
+fun spotByReg() {
+    if (!isCreated()) {
+        return
+    }
+    var str = ""
+    for (i in 0 until parking.size) {
+        try {
+            if (parking[i].split(" ")[0].lowercase() == inp[1].lowercase()) {
+                str += "${ i + 1 }, "
+            }
+        } catch (e: Exception) {
+            continue
+        }
+    }
+    if (str.length == 0) {
+        println("No cars with registration number ${inp[1]} were found.")
+    } else {
+        str = str.substring(0, str.length - 2)
+        println(str)
+    }
+}
+
+fun isCreated(): Boolean {
+    if (!created) {
+        println("Sorry, a parking lot has not been created.")
+        return false
+    }
+    return true
+}
+
